@@ -9,6 +9,8 @@ github.com/adam-lavrik/go-imath v0.0.0-20210910152346-265a42a96f0b h1:g9SuFmxM/W
 github.com/adam-lavrik/go-imath v0.0.0-20210910152346-265a42a96f0b/go.mod h1:XjvqMUpGd3Xn9Jtzk/4GEBCSoBX0eB2RyriXgne0IdM=
 github.com/alecthomas/chroma v0.10.0 h1:7XDcGkCQopCNKjZHfYrNLraA+M7e0fMiJ/Mfikbfjek=
 github.com/alecthomas/chroma v0.10.0/go.mod h1:jtJATyUxlIORhUOFNA9NZDWGAQ8wpxQQqNSB4rjA/1s=
+github.com/cnkei/gospline v0.0.0-20191204052713-d67fac29a294 h1:zIFcK9T9qytnmXuKt5Z7jG66C8c8FJjy8rtxOmVVm0o=
+github.com/cnkei/gospline v0.0.0-20191204052713-d67fac29a294/go.mod h1:DXXGDL64/wxXgBSgmGMEL0vYC0tdvpgNhkJrvavhqDM=
 github.com/cnkei/gospline v0.0.0-20191204072713-842a72f86331 h1:LaKIRdLDg4mn0OkEtcr3unP0M8uQ1oyEw/05SbX/O48=
 github.com/cnkei/gospline v0.0.0-20191204072713-842a72f86331/go.mod h1:DXXGDL64/wxXgBSgmGMEL0vYC0tdvpgNhkJrvavhqDM=
 github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d/go.mod h1:maD7wRr/U5Z6m/iR4s+kqSMx2CaBsrgA7czyZG/E6dU=
