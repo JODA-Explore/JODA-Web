@@ -1,4 +1,4 @@
-FROM golang:1.12-alpine
+FROM golang:1.20-alpine
 
 # Add Maintainer Info
 LABEL maintainer="Nico Schaefer <nschaefer@cs.uni-kl.de>"
