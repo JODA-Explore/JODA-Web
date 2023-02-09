@@ -1,0 +1,110 @@
+{{ template "header.html" . }}
+
+<link rel="stylesheet" href="/static/css/querystats.css" type="text/css" />
+
+<style>
+  .stat-label{
+    font-weight: bold;
+  }
+</style>
+
+{{if index . "result"}}
+<form action="result" style="margin-bottom: 50px;">
+ <input type="hidden"  name="result" value="{{.result}}">
+ <button type="submit" style="width: 300px;">Show Result Documents</button>
+</form>
+
+<form action="download" style="margin-bottom: 10px;">
+  <input type="hidden"  name="result" value="{{.result}}">
+  <input type="hidden"  name="lineseparated" value="true">
+  <button type="submit" style="width: 300px;">Download Result Documents</button>
+ </form>
+{{end}}
+
+
+{{if index . "benchmark"}}
+{{with .benchmark}}
+
+<div class="w3-card-4 ">
+  <header class="w3-container w3-text-white" style="background-color: var(--main-bg-color);">
+    <h3>Query</h3>
+  </header>
+  <div class="w3-container">
+    <pre>{{.Query}}</pre>
+  </div>
+</div>
+
+<div class="w3-card-4 " style="margin-top: 30px;">
+  <header class="w3-container w3-text-white" style="background-color: var(--main-bg-color);">
+    <h3>Result</h3>
+  </header>
+  <div class="w3-container">
+    <div class="w3-row">
+      <div class="w3-quarter">
+        <div class="stat-label">Time:</div>
+        <div class="">{{.HumanTime}}</div>
+      </div>
+      <div class="w3-quarter">
+        <div class="stat-label">#Documents:</div>
+        <div class="">{{.ResultSize}}</div>
+      </div>
+      <div class="w3-quarter">
+        <div class="stat-label">#Containers:</div>
+        <div class="">{{.Container}}</div>
+      </div>
+
+    </div>
+    
+  </div>
+</div>
+  
+
+
+  <!-- Query Evaluation-->
+  {{if ne .Runtime nil}}
+  {{with .Runtime}}
+
+  <div class="w3-card-4 " style="margin-top: 30px;">
+    <header class="w3-container w3-text-white" style="background-color: var(--main-bg-color);">
+      <h3>Query Evaluation</h3>
+    </header>
+    <div class="w3-container">
+      <div class="w3-row">
+        <div class="w3-quarter">
+          <div class="stat-label">Total Runtime:</div>
+          <div class="">{{.Query}} s</div>
+        </div>
+        <div class="w3-quarter">
+          <div class="stat-label">Planning:</div>
+          <div class="">{{.Planning}} s</div>
+        </div>
+        <div class="w3-quarter">
+          <div class="stat-label">Optimization:</div>
+          <div class="">{{.Optimization}} s</div>
+        </div>
+        
+      </div>      
+    </div>
+  </div>
+  {{end}}
+  {{end}}
+
+ <!-- Pipeline--> 
+  
+  {{with .Pipeline}}
+  {{ template "pipeline.html" . }}
+  {{end}}
+
+  {{if ne .UnoptimizedPipeline nil}}
+  {{with .UnoptimizedPipeline}}
+    {{ template "debug-pipeline.html" . }}
+  {{end}}
+  {{end}}
+
+
+{{end}}
+{{end}}
+
+
+
+{{ template "footer.html" . }}

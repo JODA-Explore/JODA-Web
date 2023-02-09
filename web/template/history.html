@@ -1,0 +1,41 @@
+<div class="history_node">
+    <div class=""> {{$key.StoreVar.Name}}</div>
+</div>
+
+
+{{ $key := .Key}}
+<b>Name:{{$key.StoreVar.Name}} </b>
+<details>
+    <summary>
+        <b>Details:</b>
+    </summary>
+    <div style="margin-left: 1em">
+        <p> Id: {{.Id}} </p>
+        <p> MinRating: {{$key.Opt.MinRating}} </p>
+        <p> MaxNumber: {{$key.Opt.MaxNumber}} </p>
+        <p> Backends: {{$key.ShowBackends}} </p>
+    </div>
+</details>
+<details>
+    <summary>
+        <b>Query:</b>
+    </summary>
+    <div style="margin-left: 1em;background-color:powderblue;">
+        {{$key.StoreVar.Query}}
+    </div>
+</details>
+<details>
+    <summary>
+        <b>Actions:</b>
+    </summary>
+    <div style="margin-left: 1em;">
+        <div class="w3-bar">
+            <button class="w3-btn w3-green w3-ripple" onclick="">
+                <b>Explore</b>
+            </button>
+            <button class="w3-btn w3-green w3-ripple" onclick=";">
+                <b>Delete</b>
+            </button>
+        </div><br>
+    </div>
+</details>

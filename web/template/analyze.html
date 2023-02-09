@@ -1,0 +1,85 @@
+{{ template "header.html" . }}
+<link rel="stylesheet" href="/static/css/analyze.css" type="text/css"/>
+<script src="/static/js/jquery-1.10.2.min.js"></script>
+<script src="/static/js/d3.v3.min.js"></script>
+
+
+  <div id="tree-container"></div>
+  <div id="stats-container">
+    <h5 id="stats-name"></h5>
+    <div id="stats-meta" style="display: flex;">
+      <!-- Left -->
+      <div id="stats-left" style="width: 45%; ">
+
+        <!-- Exist -->
+        <div style="width: 60px;">
+          Exist:
+        </div>
+        <div class="w3-grey progress-bar" >
+          <div id="stats-exist-perc" class="w3-container w3-center w3-text-white w3-green progress-bar-percentage"><span>0%</span></div>
+        </div>
+
+        <!-- Object -->
+        <div style="width: 60px;">
+          Object:
+        </div>
+        <div class="w3-grey progress-bar" >
+          <div id="stats-object-perc" class="w3-container w3-center w3-text-white w3-green progress-bar-percentage"><span>0%</span></div>
+        </div>
+        
+        <!-- Array -->
+        <div style="width: 60px;">
+          Array:
+        </div>
+        <div class="w3-grey progress-bar" >
+          <div id="stats-array-perc" class="w3-container w3-center w3-text-white w3-green progress-bar-percentage"><span>0%</span></div>
+        </div>
+        
+
+      </div>
+
+      <!-- Right -->
+      <div id="stats-right" style="margin-left:10%; flex-grow: 1;">
+        <!-- string -->
+        <div style="width: 60px;">
+          String:
+        </div>
+        <div class="w3-grey progress-bar" >
+          <div id="stats-string-perc" class="w3-container w3-center w3-text-white w3-green progress-bar-percentage"><span>0%</span></div>
+        </div>
+
+        <!-- Number -->
+        <div style="width: 60px;">
+          Number:
+        </div>
+        <div class="w3-grey progress-bar" >
+          <div id="stats-number-perc" class="w3-container w3-center w3-text-white w3-green progress-bar-percentage"><span>0%</span></div>
+        </div>
+        
+        <!-- Boolean -->
+        <div style="width: 60px;">
+          Boolean:
+        </div>
+        <div class="w3-grey progress-bar" >
+          <div id="stats-boolean-perc" class="w3-container w3-center w3-text-white w3-green progress-bar-percentage"><span>0%</span></div>
+        </div>
+
+        <div style="width: 60px;">
+          Null:
+        </div>
+        <div class="w3-grey progress-bar" >
+          <div id="stats-null-perc" class="w3-container w3-center w3-text-white w3-green progress-bar-percentage"><span>0%</span></div>
+        </div>
+        
+      </div>
+
+    </div>
+
+  </div>
+
+
+{{if index . "tree"}}
+{{ template "analyze_tree_script.html" . }}
+{{end}}
+ 
+{{ template "footer.html" . }}

@@ -1,0 +1,153 @@
+{{ template "header.html" . }}
+
+<!-- Load Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script src="/static/js/jquery-1.10.2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="/static/js/deh.js"></script>
+<link rel="stylesheet" href="/static/css/deh.css" type="text/css" />
+<div>
+    <strong>&nbsp;&nbsp;&nbsp;&nbsp;Misc:</strong>
+    <div class="w3-container" id="misc-div">
+        <div class="w3-bar w3-black main-buttonbar">
+            <button id="misc-history-btn" class="w3-bar-item w3-btn" onclick="handleButtonBar('misc-history-btn','misc-div','misc-history-div')">
+                <b>History</b>
+            </button>
+            <button id="misc-filter-btn" class="w3-bar-item w3-btn" onclick="handleButtonBar('misc-filter-btn','misc-div','misc-filter-div')">
+                <b>Filter</b>
+            </button>
+        </div>
+        <div class="w3-container w3-display-container w3-border buttonbar-content-div">
+            <div id="misc-history-div" style="display:none;" class="w3-container w3-animate-opacity content">
+                <span onclick="this.parentElement.style.display='none'" type="button" class="close-btn w3-ripple">
+                    <span style="font-size: 0.9em; color: gray;">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </span>
+                <span onclick="updateDatasetDesc()" type="button" class="refresh-btn w3-ripple">
+                    <span style="font-size: 0.9em; color: gray;">
+                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                    </span>
+                </span>
+                <div class="grid_wrapper">
+                    <div id="misc-history-list" class="grid_history"></div>
+                    <div id="misc-history-dataset-desc" class="grid_dataset-desc"></div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-container w3-border buttonbar-content-div">
+            <div id="misc-filter-div" style="display:none;" class="w3-container w3-animate-opacity content">
+                <hr>
+                <p>
+                    <label for="dehMinRating">
+                        <strong>Min Rating</strong>
+                        <input class="w3-input" type="text" id="dehMinRating" name="dehMinRating" value="0.4">
+                    </label>
+                </p>
+                <p>
+                    <label for="dehMaxItems">
+                        <strong>Max Number</strong> <i>of Results</i>
+                        <input class="w3-input" type="text" id="dehMaxItems" name="dehMaxItems" value="20">
+                    </label>
+                </p>
+                <p>
+                    <label for="dehMaxDiff">
+                        <strong>Max Difference</strong> <i> of results that can be merged together (percent)</i>
+                        <input class="w3-input" type="text" id="dehMaxDiff" name="dehMaxItems" value="10">
+                    </label>
+                </p>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+
+<div id="data-source-container">
+    <strong>&nbsp;&nbsp;&nbsp;&nbsp;Data Source:</strong>
+    <div class="w3-container" id="data-source-div">
+        <div class="w3-bar w3-black main-buttonbar">
+            <button id="data-source-exists-btn" class="w3-bar-item w3-btn w3-green" onclick="handleButtonBar('data-source-exists-btn','data-source-div','data-source-exists')">
+                <b>Exists Source</b>
+            </button>
+
+            <button id="data-source-new-btn" class="w3-bar-item w3-btn" onclick="handleButtonBar('data-source-new-btn','data-source-div','data-source-new')">
+                <b>New Source Based On Exists Source</b>
+            </button>
+
+            <button id="data-source-load-btn" class="w3-bar-item w3-btn" onclick="handleButtonBar('data-source-load-btn','data-source-div','data-source-load')">
+                <b>Load New Data Source</b>
+            </button>
+        </div>
+        <div class="w3-container w3-border buttonbar-content-div">
+            <div id="data-source-exists" style="display:block;" class="w3-container w3-animate-opacity content">
+                <hr>
+                Select exists source:&nbsp;
+                <select id="data-source-exists-select-name" onClick="updateDatasetsOpt('data-source-exists-select-name')">
+                    <option> --None-- </option>
+                    {{range .sourceNames}}
+                    <option> {{.}}</option>
+                    {{end}}
+                </select>
+                <hr>
+            </div>
+
+            <div id="data-source-new" style="display:none;" class="w3-container content">
+                <hr>
+                Load From:&nbsp;
+                <select id="data-source-new-select-parent" onClick="updateDatasetsOpt('data-source-new-select-parent')">
+                    <option> --None-- </option>
+                    {{range .sourceNames}}
+                    <option> {{.}}</option>
+                    {{end}}
+                </select>
+                <p> Query:<i style="font-size:80%;color:gray"> **without keywords LOAD and STORE </i> </p> <textarea class="w3-input" id="data-source-new-query" name="data-source-new-query" value=""></textarea>
+                <span style='display:flex;'> Store As:&nbsp;<input style='display:flex;' type="text" id="data-source-new-name" name="data-source-new-name" value="" size="10"></span>
+                <hr>
+            </div>
+
+            <div id="data-source-load" style="display:none;" class="w3-container content">
+                <hr>
+                <span style='display:flex;'> Load:&nbsp;<input style='display:flex;' type="text" id="data-source-load-name" name="data-source-load-name" value="" size="10"></span>
+                <p> From:</p> <textarea class="w3-input" id="data-source-load-query" name="data-source-load-query" value=""></textarea>
+                <hr>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<form class="w3-container" id="search" action="/api/queries" method="GET">
+    <strong>Enabled Backends:</strong>
+    {{range $i, $name := .analysisNames}}
+    <p>
+        <label> <input type="checkbox" id="backend_{{$i}}" name={{$name}} checked> {{$name}}</label>
+    </p>
+    {{end}}
+    <input type="submit" class="w3-hover-green w3-ripple" value="Submit">
+</form>
+
+
+<div id="deh_content"> </div>
+
+<script>
+    handleHistory()
+    const searchForm = document.getElementById('search')
+    searchForm.addEventListener('submit', (event) => {
+        // stop form submission
+        event.preventDefault()
+        var url = new URL(searchForm.action)
+        var params = getFormData($('#search'))
+        url.search = new URLSearchParams(params).toString();
+        fetch(url)
+            .then(response => response.text())
+            .then((response) => {
+                document.getElementById('deh_content').innerHTML = response
+                updateAll()
+            })
+    }, false)
+</script>
+
+{{ template "footer.html" . }}

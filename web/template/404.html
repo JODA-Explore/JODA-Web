@@ -1,0 +1,22 @@
+{{ template "header.html" . }}
+
+
+<div class="w3-row">
+  <div class="w3-col w3-quarter" style="height: 10px;">
+     
+  </div>
+<div class="w3-col w3-half w3-center w3-container" style="margin: auto; text-align: center;">
+  <img src="/static/logo/404.png" class="w3-image" alt="404" />
+</div>
+</div>
+
+<div class="w3-center w3-container" style="margin-top: 50px; margin-bottom: 100px;">
+  <h2>This page does not exist.</h2>
+</div>
+
+
+<form action="/joda">
+  <input id="return"  type="submit" value="Return to Overview">
+</form>
+
+{{ template "footer.html" . }}

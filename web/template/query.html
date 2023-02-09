@@ -1,0 +1,10 @@
+{{ template "header.html" . }}
+
+<textarea rows="{{.editorLines}}" name="query" form="queryform" spellcheck="false">{{.query}} </textarea>
+
+<form action="queryExec" id="queryform" method="post">
+  <input type="submit">
+</form>
+
+
+{{ template "footer.html" . }}

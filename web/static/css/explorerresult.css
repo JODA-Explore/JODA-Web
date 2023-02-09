@@ -1,0 +1,50 @@
+.stat-num {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.graph .links .link {
+  stroke: #999;
+  stroke-opacity: 0.6;
+  stroke-width: 5px;
+  fill: none;
+}
+
+
+.graph .nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.graph .text {
+  font-family: sans-serif;
+  font-size: 10px;
+}
+
+div.tooltip {
+  position: absolute;	
+  text-align: center;	
+  min-height: min-content;	
+  min-width: min-content;
+  max-width: 930px;
+  line-height:17px;
+  padding: 2px;		
+  border: 0px;					
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.slidecontainer{
+  width: 100%;
+}
+
+.slider{
+  width: 100%;
+}
+
+.icon-btn{
+  width: min-content;
+  display: block;
+  margin-left: auto;
+  margin-right: auto
+}

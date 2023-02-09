@@ -1,0 +1,13 @@
+<div class="w3-card-4 " style="margin-top: 30px;">
+  <header class="w3-container w3-text-white" style="background-color: var(--main-bg-color);">
+    <h3>System</h3>
+  </header>
+  {{with .Memory}}
+  <div class="w3-container"style="margin-bottom: 22px;">
+  <h6>JODA Storage:</h6>
+  <div class="w3-grey progress-bar" style="margin-bottom: 10px;">
+    <div class="w3-container w3-center w3-text-white progress-bar-percentage w3-{{.StoredColor}}" style="width:{{call .Min .StoredPerc 100}}%"><span class="w3-padding">{{.StoredHuman}}/{{.AllowedHuman}}</span></div>
+  </div>
+</div>
+  {{end}}
+</div>

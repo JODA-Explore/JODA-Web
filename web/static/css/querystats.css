@@ -1,0 +1,15 @@
+.pipeline-popup-div { /* just an example */
+  z-index: 9999;
+  position: absolute;
+  padding: 0.25em;
+  pointer-events: none;
+  }
+
+  .darkhr {
+    border: 0;
+    clear:both;
+    display:block;
+    width: 96%;               
+    background-color:#2e2e2c;
+    height: 1px;
+  }

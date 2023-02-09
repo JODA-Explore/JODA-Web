@@ -1,0 +1,38 @@
+.recent-dataset{
+  min-width: 50px;
+  max-width: 150px;
+  margin-bottom: 5px;
+}
+
+.dataset-name{
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.dataset-path{
+  font-size: 10px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.dataset-buttons{
+  height: 25px;
+}
+
+.dataset-button{
+  height: 100%;
+  width: 50% !important;
+  padding: 0;
+}
+
+.custom-file {
+  display: none;
+}
+
+.file-label {
+  width: 100%;
+}

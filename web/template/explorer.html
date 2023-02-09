@@ -1,0 +1,198 @@
+{{ template "header.html" . }}
+<link rel="stylesheet" href="/static/css/explorer.css" type="text/css" />
+<link rel="stylesheet" href="/static/css/tooltip.css" type="text/css" />
+<script src="/static/js/jquery-1.10.2.min.js"></script>
+
+
+<div class="w3-container w3-margin-bottom" id="description">
+  Here you can create and view a benchmark using the BETZE benchmark generator and export it into multiple languages.
+  An in-depth explanation of the parameters and inner workings of the generator can be found <a href="https://github.com/JODA-Explore/BETZE">here</a>.
+</div>
+
+
+<form class="w3-container" action="" id="explorerform" method="post">
+  <!-- Datasets -->
+  <div data-tooltip="The datasets on which the random explorer algorithm should be run.">
+    <select class="w3-select" multiple name="dataset" id="dataset">
+      {{ range .datasets }}
+      <option selected value="{{.}}">{{.}}</option>
+      {{ end }}
+    </select>
+    <label class="w3-text-green w3-margin-bottom" for="dataset"><b>Datasets</b></label>
+  </div>
+
+  <h3 class="w3-text-green">Presets</h3>
+
+  <div class="w3-row-padding">
+    <div class="w3-quarter w3-container">
+      <button type="button" class="w3-button w3-green" onclick="set_novice()">Novice</button>
+    </div>
+    <div class="w3-quarter w3-container">
+      <button type="button" class="w3-button w3-green" onclick="set_intermediate()">Intermediate</button>
+    </div>
+    <div class="w3-quarter w3-container">
+      <button type="button" class="w3-button w3-green" onclick="set_expert()">Expert</button>
+    </div>
+  </div>
+
+  <h3 class="w3-text-green">Settings</h3>
+  <div class="w3-row-padding w3-margin-top">
+    <!-- Seed -->
+    <div class="w3-half"
+      data-tooltip="A seed used to initialize the RNG. Using the same seed with the same settings will enable repeatable results.">
+      <input type="number" class="w3-input" id="seed" name="seed" value="{{.timestamp}}">
+      <label class="w3-text-green" for="seed"><b>Seed</b></label>
+    </div>
+
+    <!-- # Queries -->
+    <div class="w3-half" data-tooltip="How many queries should be generated.">
+      <input type="number" class="w3-input" id="num_queries" name="num_queries" value="10" min="1" step="1">
+      <label class="w3-text-green" for="num_queries"><b>Number of Queries</b></label>
+    </div>
+  </div>
+
+  <div class="w3-row-padding w3-margin-top">
+    <!-- Min Selectivity -->
+    <div class="w3-half" data-tooltip="The minimum selectivity of each query.">
+      <input type="number" class="w3-input" id="min_selectivity" name="min_selectivity" value="0.2" min="0.0" max="0.9"
+        step="0.01">
+      <label class="w3-text-green" for="min_selectivity"><b>Minimum Selectivity</b></label>
+    </div>
+
+    <!-- Max Selectivity -->
+    <div class="w3-half" data-tooltip="The maximum selectivity of each query.">
+      <input type="number" class="w3-input" id="max_selectivity" name="max_selectivity" value="0.9" min="0.1" max="1.0"
+        step="0.01">
+      <label class="w3-text-green" for="max_selectivity"><b>Maximum Selectivity</b></label>
+    </div>
+  </div>
+
+  <div class="w3-row-padding w3-margin-top">
+    <!-- probability_backtrack -->
+    <div class="w3-third"
+      data-tooltip="The probability of backtracking to the parent dataset after performing a query.">
+      <input type="number" class="w3-input" id="probability_backtrack" name="probability_backtrack" value="0.4"
+        min="0.0" max="0.8" step="0.01" onchange="update_stay_prob()">
+      <label class="w3-text-green" for="probability_backtrack"><b>Backtracing Probability</b></label>
+    </div>
+
+    <!-- probability_randomjump -->
+    <div class="w3-third" data-tooltip="The probability of jumping to a random dataset after performing a query.">
+      <input type="number" class="w3-input" id="probability_randomjump" name="probability_randomjump" value="0.1"
+        min="0.0" max="0.8" step="0.01" onchange="update_stay_prob()">
+      <label class="w3-text-green" for="probability_randomjump"><b>Random Jump Probability</b></label>
+    </div>
+
+    <!-- Stay -->
+    <div class="w3-third" data-tooltip="The probability of staying in the created dataset after performing a query.">
+      <input type="number" class="w3-input" id="probability_stay" name="probability_stay" value="0.5" min="0.0"
+        max="0.8" step="0.01" disabled>
+      <label class="w3-text-green" for="probability_stay"><b>Stay Probability</b></label>
+    </div>
+  </div>
+
+  <div class="w3-row-padding w3-margin-top">
+    <div class="w3-half">
+      <div class="" data-tooltip="The predicates that should be used in the query generation">
+        <select class="w3-select" multiple name="predicates" id="predicates">
+          {{ range .predicates }}
+          <option selected value="{{.}}">{{.}}</option>
+          {{ end }}
+        </select>
+        <label class="w3-text-green w3-margin-bottom" for="predicates"><b>Predicates</b></label>
+      </div>
+      <div
+        data-tooltip="The estimated selectivity can be far away from the real selectivity depending on the data distribution. By checking this box each query is executed and checked for it's selectivity in JODA. Checking this will make the process slow but result in better queries.">
+        <input class="w3-check" type="checkbox" name="check_queries" id="check_queries">
+        <label class="w3-text-green" for="check_queries"><b>Check Query Selectivity using JODA</b></label>
+      </div>
+    </div>
+
+
+    <div class="w3-half">
+      <div data-tooltip="The aggregations that should be used in the query generation">
+        <select class="w3-select" multiple name="aggregations" id="aggregations">
+          {{ range .aggregations }}
+          <option selected value="{{.}}">{{.}}</option>
+          {{ end }}
+        </select>
+        <label class="w3-text-green w3-margin-bottom" for="aggregations"><b>Aggregations</b></label>
+      </div>
+
+      <div data-tooltip="Uses the selected aggregations to aggregate the dataset.">
+        <input class="w3-check" type="checkbox" name="aggregate" id="aggregate" onchange="check_intermediate()">
+        <label class="w3-text-green" for="aggregate"><b>Aggregate Dataset</b></label>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="w3-text-green">Export</h3>
+  <div class="w3-row-padding w3-margin-bottom">
+    <!-- Languages -->
+    <div class="w3-half" data-tooltip="The languages into which to export the queries.">
+      <select class="w3-select" multiple name="language" id="language">
+        {{ range .languages }}
+        <option selected value="{{.ShortName}}">{{.Name}}</option>
+        {{ end }}
+      </select>
+      <label class="w3-text-green w3-margin-bottom" for="language"><b>Languages</b></label>
+    </div>
+  </div>
+  <div class="w3-row-padding w3-margin-bottom">
+    <div class="w3-half">
+      <div style="display: inline-block"
+        data-tooltip="When checked, persistent named intermediate datasets are created to be queried in following queries. If not, the query predicates will simply get increasingly more complex by including the previous one. Only takes effect for languages that support intermediate set generation.">
+        <input class="w3-check" type="checkbox" name="intermediate_sets" id="intermediate_sets">
+        <label class="w3-text-green" for="intermediate_sets"><b>Create Intermediate Datasets</b></label>
+      </div>
+    </div>
+  </div>
+
+
+  <input class="w3-margin-bottom" type="submit" value="Generate">
+</form>
+
+<script>
+  function update_stay_prob() {
+    var prob = (1.0 - $("#probability_backtrack").val() - $("#probability_randomjump").val()).toFixed(4)
+    $('#probability_stay').attr('value', prob);
+    $('#probability_stay').prop('disabled', false);
+    $('#probability_stay')[0].checkValidity();
+    $('#probability_stay').prop('disabled', true);
+  }
+
+  function set_novice() {
+    $("#probability_backtrack").attr('value', 0.5);
+    $("#probability_randomjump").attr('value', 0.3);
+    update_stay_prob();
+    $("#num_queries").attr('value', 20);
+  }
+
+  function set_intermediate() {
+    $("#probability_backtrack").attr('value', 0.4);
+    $("#probability_randomjump").attr('value', 0.1);
+    update_stay_prob();
+    $("#num_queries").attr('value', 10);
+  }
+
+  function set_expert() {
+    $("#probability_backtrack").attr('value', 0.2);
+    $("#probability_randomjump").attr('value', 0.05);
+    update_stay_prob();
+    $("#num_queries").attr('value', 5);
+  }
+
+  function check_intermediate() {
+    if ($('#aggregate').is(':checked')) {
+      $('#intermediate_sets').prop('checked', false);
+      $('#intermediate_sets').prop('disabled', true);
+    } else {
+      $('#intermediate_sets').prop('disabled', false);
+    }
+  }
+
+  check_intermediate();
+</script>
+
+
+{{ template "footer.html" . }}

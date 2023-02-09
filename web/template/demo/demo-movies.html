@@ -1,0 +1,67 @@
+<div class="w3-card-4 " style="margin-top: 30px;">
+    <header class="w3-container w3-text-white" style="background-color: var(--main-bg-color); margin-bottom: -15px;">
+      <h3>Movies</h3>
+    </header>
+    <div class="w3-row-padding"  style="margin-top: 20px;" >
+            <!-- Load  -->
+            <div class="w3-half" >
+              <form action="query">
+                <input type="hidden" id="qM_1_query" name="query" value="LOAD movies_array FROM URL &quot;https://raw.githubusercontent.com/prust/wikipedia-movie-data/master/movies.json&quot;
+AS ('': FLATTEN(''))
+STORE movies
+DELETE movies_array">
+                <input id="qM_1_submit" class="query_submit" type="submit" value="Load Dataset">
+             </form>
+            </div>
+          
+            <!-- Analyze  -->
+            <div class="w3-half" >
+              <form action="analyze">
+                <input type="hidden" id="qM_2_source" name="source" value="movies">
+                <input id="qM_2_submit" class="query_submit" type="submit" value="Analyze">
+             </form>
+            </div>
+          
+    </div>
+    <div class="w3-row-padding"  style="margin-top: 10px;" >
+
+      <div class="w3-quarter" >
+        <form action="query">
+          <input type="hidden" id="qM_3_query" name="query" value="LOAD movies
+CHOOSE IN(&quot;Action&quot;, '/genres')">
+          <input id="qM_3_submit" class="query_submit" type="submit" value="Select Action Movies">
+       </form>
+      </div>
+
+      <div class="w3-quarter" >
+        <form action="query">
+          <input type="hidden" id="qM_4_query" name="query" value="LOAD movies
+AS ('/actor': FLATTEN('/cast')), ('/movie': '/title'), ('/year': '/year')
+STORE actors ">
+          <input id="qM_4_submit" class="query_submit" type="submit" value="Select Actors">
+       </form>
+      </div>
+
+      <div class="w3-quarter" >
+        <form action="query">
+          <input type="hidden" id="qM_5_query" name="query" value="LOAD actors
+AGG ('' : GROUP DISTINCT('/movie') AS movies BY '/actor')
+STORE groupedActors;
+
+LOAD groupedActors
+AS ('':FLATTEN(''))
+STORE flattenedActors
+DELETE groupedActors;
+
+LOAD flattenedActors
+AS ('/actor' : '/group') ,('/movies':'/movies')
+DELETE flattenedActors
+">
+          <input id="qM_5_submit" class="query_submit" type="submit" value="Collect Actor Movies">
+       </form>
+      </div>
+
+      
+
+    </div>
+</div>      

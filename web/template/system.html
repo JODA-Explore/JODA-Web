@@ -1,0 +1,39 @@
+{{ template "header.html" . }}
+
+
+{{if and (index . "system")}}
+{{with .system}}
+<h5>Joda Server</h5>
+<div class="w3-row">
+<table class="w3-quarter w3-margin w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" >
+  <tr><th colspan="2" class="w3-center">JODA</th></tr>
+  <tr><td>Version</td><td>{{.Raw.Version.Version}}</td></tr>
+  <tr><td>API</td><td>{{.Raw.Version.API}}</td></tr>
+  <tr><td>Commit</td><td>{{.Raw.Version.Commit}}</td></tr>
+  <tr><td>Build Time</td><td>{{.Raw.Version.BuildTime}}</td></tr>
+</table>
+
+<table class="w3-quarter w3-margin w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" >
+  <tr><th colspan="2" class="w3-center">Host</th></tr>
+  <tr><td>OS</td><td>{{.Raw.Host.OS}}</td></tr>
+  <tr><td>Kernel</td><td>{{.Raw.Host.Kernel}}</td></tr>
+</table>
+</div>
+<h5>Memory Usage</h5>
+  {{with .Memory}}
+  JODA Storage:
+  <div class="w3-grey progress-bar">
+    <div class="w3-container w3-center w3-text-white progress-bar-percentage w3-{{.StoredColor}}" style="width:{{call .Min .StoredPerc 100}}%"><span class="w3-padding">{{.StoredHuman}}/{{.AllowedHuman}}</span></div>
+  </div>
+
+  System Memory:
+  <div class="w3-grey progress-bar">
+    <div class="w3-container w3-center w3-text-white  progress-bar-percentage w3-{{.UsedColor}}" style="width:{{call .Min .UsedPerc 100}}%"><span class="w3-padding">{{.UsedHuman}}/{{.TotalHuman}}</span></div>
+  </div>
+  {{end}}
+{{end}}
+{{end}}
+
+
+
+{{ template "footer.html" . }}

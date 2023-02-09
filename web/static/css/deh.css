@@ -1,0 +1,105 @@
+.frac {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    letter-spacing: 0.001em;
+    text-align: center;
+}
+.frac > span {
+    display: block;
+    padding: 0.1em;
+}
+.frac span.bottom {
+    border-top: thin solid black;
+}
+.frac span.symbol {
+    display: none;
+} 
+
+.mono {
+    font-family:monospace;
+}
+
+.grid_wrapper {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 10px;
+}
+
+.grid_rating {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.grid_content {
+    grid-column: 3/9;
+    grid-row: 1/9;
+}
+
+.grid_history {
+    grid-column: 1/4;
+    grid-row: 1;
+}
+
+.grid_dataset-desc {
+    grid-column: 5/9;
+    grid-row: 1/9;
+}
+
+.grid_opt {
+    grid-column: 1/6;
+    grid-row: 1/9;
+}
+
+.grid_opt-btn {
+    grid-column: 7;
+    grid-row: 4;
+}
+
+.chart-container {
+    position: relative;
+    margin: auto;
+}
+
+canvas {
+    flex-basis:100%;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.close-btn {
+    position:absolute;
+    top:0.5em;
+    right:1em;
+    cursor:pointer;
+}
+
+.refresh-btn {
+    position:absolute;
+    top:0.5em;
+    right:2.5em;
+    cursor:pointer;
+}
+
+.inline-btn {
+  color: green;
+  border: none;
+  text-decoration: Underline;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.float-btn {
+  background-color: var(--main-bg-color);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+}

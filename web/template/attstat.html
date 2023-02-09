@@ -1,0 +1,29 @@
+{{ template "header.html" . }}
+<label for="attstatDataSrc">Data Source: </label>
+<input type="text" name="attstatDataSrc" form="attstatform" value="{{if .dataSrc}}{{.dataSrc}}{{else}}twitter{{end}}"> <br>
+<label for="attstatObj">Object: </label>
+<input type="text" name="attstatObj" form="attstatform" value="{{if .obj}}{{.obj}}{{else}}/user{{end}}"><br>
+
+<form action="attstat" id="attstatform" method="post">
+    <input type="submit">
+</form>
+
+{{if .info}}
+<hr>
+<table>
+    <tr>
+        <th>count</th>
+        <th>amount</th>
+        <th>percentage</th>
+    </tr>
+    {{range $key, $val := .info}}
+    <tr>
+        <td>{{$key}}</td>
+        {{range $val}}
+        <td>{{.}}</td>
+        {{end}}
+    </tr>
+    {{end}}
+</table>
+{{end}}
+{{ template "footer.html" . }}

@@ -1,0 +1,20 @@
+version: '3'
+services:
+  joda:
+    container_name: joda
+    restart: always
+    ports:
+      - "5632:5632"
+    volumes:
+      - /home/nico/json:/data:rw
+      - /etc/localtime:/etc/localtime:ro
+    image: ghcr.io/joda-explore/joda/joda:latest
+  joda-web:
+    container_name: joda-web
+    restart: always
+    ports:
+      - "8080:8080"
+    image: ghcr.io/joda-explore/joda-web/joda-web:latest
+    depends_on:
+      - joda
+    command: "http://joda:5632"

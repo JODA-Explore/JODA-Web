@@ -1,0 +1,10 @@
+{
+  "go.inferGopath": false,
+  "search.exclude": {
+    "web/static/packages": true,
+    "web/static/js/*": true
+  },
+  "files.watcherExclude": {
+    "web/static/packages": true
+  }
+}

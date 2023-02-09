@@ -1,0 +1,101 @@
+{{ template "header.html" . }}
+<link rel="stylesheet" href="/static/css/explorerresult.css" type="text/css" />
+<script src="/static/js/jquery-1.10.2.min.js"></script>
+<script src="/static/js/d3.v4.min.js"></script>
+
+{{with .statistics}}
+<div class="w3-row-padding w3-margin-bottom">
+  <div class="w3-third">
+    <div class="w3-card-4 w3-white">
+      <header class="w3-container">
+        <h4>Random Jumps</h4>
+      </header>
+      <div class="w3-container stat-num w3-center">{{.RandomJumps}}</div>
+    </div>
+  </div>
+
+  <div class="w3-third">
+    <div class="w3-card-4 w3-white">
+      <header class="w3-container">
+        <h4>Backtracks</h4>
+      </header>
+      <div class="w3-container stat-num w3-center">{{.GoBack}}</div>
+    </div>
+  </div>
+
+  <div class="w3-third">
+    <div class="w3-card-4 w3-white">
+      <header class="w3-container">
+        <h4>Stay</h4>
+      </header>
+      <div class="w3-container stat-num w3-center">{{.Stay}}</div>
+    </div>
+  </div>
+</div>
+{{ end }}
+
+
+<div class="w3-card-4 w3-white w3-margin-bottom">
+  <header class="w3-container w3-light-gray">
+    <div class="w3-row-padding">
+      <h4 class="w3-third">Datasets</h4>
+      <div class="w3-third">
+        {{with .graph}}
+        <div class="slidecontainer">
+          <input type="range" min="0" max="{{.MaxTS}}" value="{{.MaxTS}}" class="slider" id="ts-range">
+        </div>
+        <div class="w3-row">
+          <button class="w3-btn w3-green w3-half" id="play-timeline-btn">Play</button>
+          <button class="w3-btn w3-green w3-half" id="pause-timeline-btn">Pause</button>
+        </div>
+
+        {{end}}
+      </div>
+    </div>
+
+  </header>
+  <div class="w3-container" id="explorer-tree-container">
+    {{if index . "graph"}}
+    {{ template "explorer_tree_script.html" . }}
+    {{end}}
+  </div>
+</div>
+
+
+{{ range $key, $value := .queries }}
+
+<div class="w3-card-4 w3-white w3-margin-bottom">
+  <header class="w3-container w3-light-gray">
+    <div class="w3-row-padding">
+      <h4 class="w3-third">{{$key}}</h4>
+      <div class="w3-third">
+        <button id={{printf "%s-copy-btn" $key}} class="w3-btn w3-green w3-text-white icon-btn"
+          onclick="copyFromDiv({{printf "%s-code" $key}})"><i class="fa fa-clipboard"></i></button>
+
+      </div>
+    </div>
+  </header>
+  <div id={{printf "%s-code" $key}} class="w3-code">
+    {{ range $i, $query := $value }}
+    <div class={{printf "query-%d query" $i}}>{{$query}}</div><br><br>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
+
+<script>
+  function copyFromDiv(id) {
+    var range = document.createRange();
+    range.selectNode(document.getElementById(id));
+    window.getSelection().removeAllRanges(); // clear current selection
+    window.getSelection().addRange(range); // to select text
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();// to deselect
+  }
+</script>
+
+<div class="w3-container">
+  {{.config}}
+</div>
+
+{{ template "footer.html" . }}

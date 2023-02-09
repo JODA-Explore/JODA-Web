@@ -1,0 +1,24 @@
+{{ template "header.html" . }}
+
+
+
+{{ template "demo-movies.html" . }}
+
+
+<!-- Last Card fix -->
+<div style="margin-top:20px;"></div>
+
+<script>
+{{ range $key, $value := .disabledQueries }}
+ {{if eq $key "all"}}
+  for (let element of document.getElementsByClassName("query_submit")) {
+    element.disabled = true;
+  }
+ {{else}}
+    document.getElementById("{{ $key }}_submit").disabled = true;
+ {{ end }}
+  
+{{ end }}
+</script>
+
+{{ template "footer.html" . }}

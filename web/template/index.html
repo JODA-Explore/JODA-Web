@@ -1,0 +1,148 @@
+{{ template "header.html" . }}
+<link rel="stylesheet" href="/static/css/index.css" type="text/css" />
+
+{{if .datasets}}
+<div class="w3-card-4 " style="margin-top: 30px;">
+  <header class="w3-container w3-text-white" >
+    <h3>Recently used datasets</h3>
+  </header>
+  <div class="w3-padding-16 w3-row-padding">
+    {{ range .datasets }}
+    <div class="w3-col recent-dataset">
+      <div class="w3-card-2">
+        <header class="w3-container w3-text-white" >
+          <div title="{{.Name}}" class="dataset-name">
+            {{.Name}}
+          </div>
+          <div title="{{.Path}}" class="dataset-path">
+            {{.Path}}
+          </div>
+        </header>
+        <div class="w3-row dataset-buttons">
+          <a class="w3-button w3-half dataset-button" title="Query Dataset" href="query?query={{ .Query }}"><i class="fas fa-search"></i></a>
+          <a class="w3-button w3-half dataset-button" title="Load Dataset" href="queryExec?query={{ .Query }}"><i class="fas fa-file-import"></i></a>
+        </div>
+      </div>
+    </div>
+    {{end}}
+  </div>
+
+</div>
+{{end}}
+
+
+<div class="w3-card-4 " style="margin-top: 30px;">
+  <header class="w3-container w3-text-white" style="margin-bottom: -15px;">
+    <h3>Collections</h3>
+  </header>
+  <table class="w3-table w3-striped w3-bordered w3-hoverable w3-white">
+    <tr>
+      <th>Name</th>
+      <th>Documents</th>
+      <th>Container</th>
+      <th>In-Memory</th>
+      <th class="queryrow">Query</th>
+      <th>Operation</th>
+    </tr>
+  
+        {{ range .sources }}
+          <tr>
+                <td>{{ .Name }}</td>
+                <td>{{ .HumanDocuments }}</td>
+                <td>{{ .HumanContainer }}</td>
+                <td>{{ .HumanMemory }}</td>
+                <td class="queryrow" title="{{.Query}}">{{ .Query }}</td>
+                <td>
+                  <a title="Query Collection" href="query?query=LOAD%20{{ .Name }}"><i class="fas fa-search"></i></a>
+                  <a title="Delete Collection" href="delete?{{ .GetRemoveParams }}"><i class="fas fa-trash"></i></a>
+                  <a title="Analyze Collection" href="analyze?source={{ .Name }}"><i class="fas fa-flask"></i></a>
+                </td>
+          </tr>
+        {{ end }} 
+  
+  </table>
+</div>
+
+
+
+<div class="w3-card-4 " style="margin-top: 30px;">
+  <header class="w3-container w3-text-white" style="margin-bottom: -15px;">
+    <h3>Results</h3>
+  </header>
+  <table class="w3-table w3-striped w3-bordered w3-hoverable w3-white">
+    <tr>
+      <th>ID</th>
+      <th>Documents</th>
+      <th>Container</th>
+      <th>In-Memory</th>
+      <th class="queryrow">Query</th>
+      <th>Operation</th>
+    </tr>
+    {{ range .results }}
+    <tr>
+      <td>{{ .ID }}</td>
+      <td>{{ .HumanDocuments }}</td>
+      <td>{{ .HumanContainer }}</td>
+      <td>{{ .HumanMemory }}</td>
+      <td class="queryrow" title="{{.Query}}">{{ .Query }}</td>
+      <td>
+        <a title="View Result" href="result?result={{ .ID }}"><i class="fas fa-file-alt"></i></a>
+        <a title="Delete Result" href="delete?{{ .GetRemoveParams }}"><i class="fas fa-trash"></i></a>
+        <a title="Download (lineseparated) Result" href="download?result={{ .ID }}&lineseparated"><i
+            class="fas fa-download"></i></a>
+      </td>
+    </tr>
+    {{ end }}
+  </table>
+</div>
+
+
+<div class="w3-card-4 " style="margin-top: 30px;">
+  <header class="w3-container w3-text-white" style="margin-bottom: -15px;">
+    <h3>User-Defined Modules</h3>
+  </header>
+
+  <table class="w3-table w3-striped w3-bordered w3-hoverable w3-white">
+    <tr>
+      <th>Module</th>
+      <th>Type</th>
+      <th>Language</th>
+      <th>Operation</th>
+    </tr>
+    {{ range .modules }}
+    <tr>
+      <td>{{ .Name }}</td>
+      <td>{{ .Type }}</td>
+      <td>{{ .Language }}</td>
+      <td>
+        <a title="Delete Module" href="delete"><i class="fas fa-trash"></i></a>
+      </td>
+    </tr>
+    {{ end }}
+  </table>
+
+  <form method="post" enctype="multipart/form-data" class="w3-container" style="margin-top: 10px;padding-bottom: 10px;" id="module-form" action="/joda/module">
+    <label for="module" class="w3-btn w3-green file-label">
+      <i class="fas fa-upload"></i> Upload Module
+    </label>
+    <input type="file" class="custom-file" id="module" name="module">
+  </form>
+
+
+</div>
+
+
+
+<script>
+  document.getElementById("module").onchange = function() {
+    document.getElementById("module-form").submit();
+};
+</script>
+
+
+{{if and (index . "system_summary")}}
+{{ template "system_summary.html" .system_summary }}
+{{end}}
+
+
+{{ template "footer.html" . }}

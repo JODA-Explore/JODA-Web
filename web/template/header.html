@@ -1,0 +1,102 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <title>{{.title}}</title>  
+    
+    <meta charset="UTF-8">
+    <meta name="description" content="JODA Web Interface">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{if index . "meta"}}
+      {{.meta}}
+    {{end}}
+    <link rel="stylesheet" href="/static/css/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link href="/static/packages/fontawesome-5.12.1/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/default.css">
+</head>  
+<body class="w3-light-grey">
+
+    <!-- Top container -->
+<div class="w3-bar w3-top w3-large head-bar" style="z-index:4">
+    <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey w3-text-white" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+    <a target="_blank" href="https://dbis.cs.uni-kl.de/index.php/en/"><img class="w3-bar-item w3-right" style="height:100%; width:auto" src="/static/logo/dbislogo_default_nobg.svg" alt="DBIS" /></a> 
+</div>
+  
+  <!-- Sidebar/menu -->
+  <nav class="w3-sidebar w3-collapse w3-white" style="z-index:3;width:200px;" id="mySidebar"><br>
+    <div class="w3-container w3-row">
+      <a target="_blank" href="https://joda-explore.github.io/JODA/"><img class="w3-bar-item w3-center" style="width:90%; height:auto" src="/static/logo/JODA.svg" alt="JODA" /> </a>
+    </div>
+    <hr>
+    <div class="w3-container">
+      <a href="/joda" style="text-decoration: none;"><h5>JODA Web</h5></a>
+    </div>
+    <div class="w3-bar-block">
+      <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+      <a href="/joda" class="w3-bar-item w3-button w3-padding"><i class="fa fa-list fa-fw"></i>  Overview</a>
+      <a href="/joda/query" class="w3-bar-item w3-button w3-padding"><i class="fa fa-search fa-fw"></i>  Query</a>
+      <a href="/joda/betze" class="w3-bar-item w3-button w3-padding"><i class="fa fa-flask fa-fw"></i> BETZE</a>
+      <a href="/joda/explore" class="w3-bar-item w3-button w3-padding"><i class="fa fa-compass fa-fw"></i>  Explore</a>
+      <a href="/joda/system" class="w3-bar-item w3-button w3-padding"><i class="fa fa-server fa-fw"></i>  System</a>
+      <a href="/joda/demo" class="w3-bar-item w3-button w3-padding"><i class="fa fa-laptop fa-fw"></i>  Example Queries</a>
+      <a href="https://joda-explore.github.io/JODA/language/" target="_blank" class="w3-bar-item w3-button w3-padding"><i class="fa fa-book fa-fw"></i>  Reference</a>
+    </div>
+  </nav>
+  
+  
+  <!-- Overlay effect when opening sidebar on small screens -->
+  <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+  
+  <!-- !PAGE CONTENT! -->
+  <div class="w3-container w3-main" style="margin-left:200px;margin-top:43px;">
+
+      <!-- !Message Boxes! -->
+    {{if index . "messages"}}
+    {{with .messages}}
+
+    {{range .Errors}}
+    <div class="alert">
+      <span class="closebtn">&times;</span>  
+      <h6><b><i class="fa fa-exclamation-triangle"></i> Error!</b></h6>
+      {{.}}
+      <br>
+        Is the server available? You can configure the host <a href="/config" title="Configure">here</a>.
+    </div>
+    {{end}}
+
+    {{range .Warnings}}
+    <div class="alert warning">
+      <span class="closebtn">&times;</span>  
+      <h6><b><i class="fa fa-exclamation"></i> Warning!</b></h6>
+      {{.}}
+    </div>
+    {{end}}
+
+    {{range .Successes}}
+    <div class="alert success">
+      <span class="closebtn">&times;</span>  
+      <h6><b><i class="fa fa-check"></i> Success!</b></h6>
+      {{.}}
+    </div>
+    {{end}}
+
+    {{range .Infos}}
+    <div class="alert info">
+      <span class="closebtn">&times;</span>  
+      <h6><b><i class="fa fa-info"></i> Information</b></h6>
+      {{.}}
+    </div>
+    {{end}}
+    
+
+    {{end}}
+    {{end}}
+
+
+    <!-- Header -->
+  <header class="w3-container" style="padding-top:10px">
+    <h4><b><i class="fas fa-{{.icon}}"></i> {{.title}} </b></h4>
+  </header>
+
+ <div class="w3-container"> 
+

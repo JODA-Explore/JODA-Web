@@ -1,0 +1,34 @@
+{{if .dataset}}
+{{$dataset := .dataset}}
+<hr>
+{{range $i,$r := .results}}
+<div class="grid_wrapper">
+    <div class="grid_rating"> {{$r.PrettyScore}} </div>
+    <div class="grid_content">
+
+        <div><b>Description:</b><br> {{$r.Desc }} </div>
+        <br>
+        <details id="details_rating_{{$i}}" onclick="fetchApi('track_rating',{{$i}},'{{$dataset}}','rating_{{$i}}')">
+            <summary>
+                <b>Rating:</b>
+            </summary>
+            <div id="rating_{{$i}}" style="margin-left: 1em;"></div>
+        </details>
+
+        <br>
+        <details>
+            <summary onclick="handleQueryGenerator({{$i}},'{{$dataset}}')">
+                <b>Query:</b>
+            </summary>
+            <br>
+            <div id="QueryGenerator_{{$i}}"></div>
+        </details>
+        <br>
+        <div style="font-size:14px;"> <i>Comes From: {{$r.Backend.Name}}</i></div>
+    </div>
+</div>
+<hr>
+{{end}}
+{{end}}
+
+<hr>

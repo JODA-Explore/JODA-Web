@@ -1,0 +1,137 @@
+{{ template "header.html" . }}
+  
+  
+  
+{{if and (index . "interface")}}
+
+<style>
+   pre{
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 10px;
+   }
+</style>
+
+{{with .interface}}
+  
+
+
+
+     
+   <div class="w3-card-4 " style="margin-top: 30px; padding-bottom: 10px; margin-bottom: 30px;">
+      <header class="w3-container w3-text-white" style="background-color: var(--main-bg-color);">
+        <h3>Resultset</h3>
+      </header>
+
+      <div class="container">
+         <pre>{{.query}}</pre>
+      </div>
+      <div class="w3-row-padding">
+         <div class="w3-third w3-left">
+            <form action="delete">
+               <input type="hidden" id="result" name="result" value="{{.result}}">
+               <button type="submit" ><i class="fas fa-trash"></i> Delete and return to overview</button>
+            </form>
+         </div>
+         <div class="w3-third w3-right">
+            <form action="/joda">
+               <button type="submit" ><i class="fas fa-list"></i> Keep and return to overview</button>
+            </form>
+         </div>
+         <div class="w3-third w3-right">
+            <form action="download">
+               <input type="hidden"  name="result" value="{{.result}}">
+               <input type="hidden"  name="lineseparated" value="true">
+               <button type="submit" ><i class="fas fa-download"></i> Download</button>
+              </form>
+         </div>
+      </div>
+   </div>
+
+
+
+
+   {{ template "geojsonviewer.html" . }}
+
+
+   <div class="w3-card-4 " style="margin-top: 30px; margin-bottom: 30px;">
+      <header class="w3-container w3-text-white" style="background-color: var(--main-bg-color);">
+        <h3>Document {{.doc_num}} / {{.doc_count}}</h3>
+      </header>
+
+      <div id="docControls"  style="text-align: center;">
+         <button id="clip" class="btn" data-clipboard-target="#jsonviewer" title="Copy Document to Clipboard" style="width: 30px; height: 30px; padding: 0%; display: inline-block;">
+            <i class="fas fa-paste"></i>
+         </button>
+           <form action="download" style="display: inline-block;">
+            <input type="hidden"  name="result" value="{{.result}}">
+            <input type="hidden"  name="doc" value="{{.doc_id}}">
+            <button id="download" type="submit" class="btn btn-primary" title="Download JSON Document"  style="width: 30px; height: 30px;padding: 0%;">
+               <i class="fas fa-file-download"></i>
+            </button>
+            </form>
+      </div>
+
+      <div id="docNAvigation"  style="text-align: center;">
+         {{if (ne .doc_id_prev .doc_id)}}
+         <form action="result" style="display: inline-block;">
+            <input type="hidden"  name="result" value="{{.result}}">
+            <input type="hidden"  name="doc" value="{{.doc_id_prev}}">
+            <button id="prevLink" type="submit" class="btn btn-primary" title="Previous Document"  style="width: 30px; height: 30px;padding: 0%;">
+               <i class="fas fa-arrow-left"></i>
+            </button>
+         </form>
+         {{end}}
+
+         {{if (ne .doc_id_next .doc_last)}}
+         <form action="result" style="display: inline-block;">
+            <input type="hidden"  name="result" value="{{.result}}">
+            <input type="hidden"  name="doc" value="{{.doc_id_next}}">
+            <button id="nextLink" type="submit" class="btn btn-primary" title="Next Document"  style="width: 30px; height: 30px;padding: 0%;">
+               <i class="fas fa-arrow-right"></i>
+            </button>
+         </form>
+         {{end}}
+      </div>
+
+      <div id="jsonviewer">{{.syntax}}</div>
+      
+   </div>
+
+
+
+
+
+
+
+  
+
+  
+  <script src="/static/js/clipboard.min.js"></script>
+  <script>
+     new ClipboardJS('#clip');
+  </script>
+
+<script>
+   document.addEventListener("keyup",function(e){
+  var key = e.which||e.keyCode;
+  switch(key){
+     //left arrow
+     case 37:
+        document.getElementById("prevLink").click();
+     break;
+     //right arrow
+     case 39:
+        document.getElementById("nextLink").click();
+     break;
+  }
+});
+ </script>
+
+{{end}}
+{{end}}
+
+
+{{ template "footer.html" . }}
